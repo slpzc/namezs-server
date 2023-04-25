@@ -4,8 +4,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3002;
-const { memoryUsage } = require ('node:process');
-console.log(memoryUsage());
 app.use(cors({
     origin: 'http://localhost:3000'
 })); //используем настройки CORS для всех роутов

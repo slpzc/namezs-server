@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3002;
 app.use(cors({
-    origin: 'https://namezs-full.vercel.app/'
+    origin: '*'
 })); //используем настройки CORS для всех роутов
 
 app.use(bodyParser.json()); // Парсинг JSON

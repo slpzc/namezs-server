@@ -16,7 +16,7 @@ const filePath = './works.json';
 app.post('/newPost', async (req, res) => { //используем async await для обработки ошибок
     try {
         const newData = req.body;
-        await fs.writeFile(filePath, JSON.stringify(newData)); //используем await для writeFile
+        await fs.writeFileSync(filePath, JSON.stringify(newData)); //используем await для writeFile
         console.log(`Данные успешно записаны в файл ${filePath}`);
         res.sendStatus(200);
     } catch (err) {

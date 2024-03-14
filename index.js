@@ -1,5 +1,5 @@
 const express = require('express');
-const fs = require('fs/promises'); //используем promises версию fs
+const fs = require('fs'); //используем promises версию fs
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
@@ -28,12 +28,12 @@ app.post('/newPost', async (req, res) => { //используем async await д
 app.post('/deletePost', async (req, res) => { //используем async await для обработки ошибок
     try {
         const deleteData = req.body.postTitle;
-        const oldData = await fs.readFile(filePath, {encoding:'utf8'})
+        const oldData = await fs.readFileSync(filePath, {encoding:'utf8'})
         const parsedData = JSON.parse(oldData)
-
         parsedData.projects = parsedData.projects.filter(item => item.title !== deleteData);
-
-        await fs.writeFile(filePath, JSON.stringify(parsedData)); //используем await для writeFile
+        
+        console.log(parsedData)
+        await fs.writeFileSync(filePath, JSON.stringify(parsedData)); //используем await для writeFile
         console.log(`Данные успешно удалены в файле ${filePath}`);
         res.sendStatus(200);
     } catch (err) {
@@ -45,7 +45,7 @@ app.post('/deletePost', async (req, res) => { //используем async await
 app.get('/', async (req, res) => { //используем async await для обработки ошибок
     try {
         console.log('get')
-        const data = await fs.readFile(filePath, 'utf8'); //используем await для readFile
+        const data = await fs.readFileSync(filePath, 'utf8'); //используем await для readFile
         res.send(JSON.parse(data));
     } catch (err) {
         console.error(err);

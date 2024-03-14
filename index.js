@@ -15,8 +15,14 @@ const filePath = './works.json';
 
 app.post('/newPost', async (req, res) => { //используем async await для обработки ошибок
     try {
+        const oldData = await fs.readFileSync(filePath, {encoding:'utf8'})
+        const parsedData = JSON.parse(oldData)
+        
         const newData = req.body;
-        await fs.writeFileSync(filePath, JSON.stringify(newData)); //используем await для writeFile
+        
+        parsedData.projects.push(newData.workTemplate)
+        
+        await fs.writeFileSync(filePath, JSON.stringify(parsedData)); //используем await для writeFile
         console.log(`Данные успешно записаны в файл ${filePath}`);
         res.sendStatus(200);
     } catch (err) {
@@ -32,10 +38,10 @@ app.post('/deletePost', async (req, res) => { //используем async await
         const parsedData = JSON.parse(oldData)
         parsedData.projects = parsedData.projects.filter(item => item.title !== deleteData);
         
-        console.log(parsedData)
         await fs.writeFileSync(filePath, JSON.stringify(parsedData)); //используем await для writeFile
-        console.log(`Данные успешно удалены в файле ${filePath}`);
-        res.sendStatus(200);
+        res.send(JSON.stringify(parsedData));
+        
+        console.log(parsedData)
     } catch (err) {
         console.error(err);
         res.sendStatus(500);
@@ -47,6 +53,7 @@ app.get('/', async (req, res) => { //используем async await для о�
         console.log('get')
         const data = await fs.readFileSync(filePath, 'utf8'); //используем await для readFile
         res.send(JSON.parse(data));
+        console.log(data)
     } catch (err) {
         console.error(err);
         res.status(500).send('Ошибка сервера');
